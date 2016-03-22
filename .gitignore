@@ -1,2 +1,5 @@
 #Ignore all python cache files
 __pycache__
+
+#Ignore all files ending with ~
+*~
