@@ -12,7 +12,18 @@ def isExtinct(state):
 	return extinct
 	
 def nextState(state):
-	nState = state;
+	
+	n = len(state)
+	nState = [[0]*n for x in range(n)]
+	
+	for i in range(n):
+		for j in range(n):
+			nb_sum = sum(neigbhors(state,i,j))
+			#print("sum of (%d,%d) is %d" % (i,j,nb_sum))
+			if(nb_sum == 1 or nb_sum == 2):
+				nState[i][j] = 1
+			#else:
+				#nState[i][j] = 0
 	
 	return nState
 	
