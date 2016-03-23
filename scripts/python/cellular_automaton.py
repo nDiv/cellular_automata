@@ -5,7 +5,7 @@ def simAutomaton(n):
 	startT = time.time()
 	
 	lives = 0
-	for i in range(1,2**n):
+	for i in range(1,2**(n*n)):
 	
 		if(simStateGen(num2state(i,n))):
 			lives = lives + 1
@@ -100,6 +100,7 @@ def statesEqual(S1,S2):
 def simStateGen(state):
 	
 	initState = list(state)
+	n = len(state)
 	counter = 0
 	while(True):
 		state = nextState(state)
@@ -108,11 +109,13 @@ def simStateGen(state):
 		
 		if(statesEqual(state,initState)):
 			return True
-			
-		if(counter > 100):
+		
+		counter = counter + 1
+		if(counter > 2**(n*n)-1):
 			break
+		#print(state)
 			
-	return -1 #Something wrong happened!
+	return True #Something wrong happened!
 	
 def num2state(num, n):
 	
