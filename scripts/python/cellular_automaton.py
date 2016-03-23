@@ -14,13 +14,14 @@ def simAutomaton(n):
 	
 		if(simStateGen(num2state(i,n))): # If state does not go extinct, increment lives.
 			lives = lives + 1
-			currentT = time.time()
-			print("Current lives: %d, time: %f" % (lives,currentT-startT))
+			#currentT = time.time()
+			#print("Current lives: %d, time: %f" % (lives,currentT-startT))
 		
-		if(i%1000 == 0):
+		
+		if(i%10000 == 0):
 			currentT = time.time()
-			print("Loop: %d, time: %f" % (i,currentT-startT))
-	
+			print("Loop: %d, time: %f seconds" % (i,currentT-startT))
+		
 	endT = time.time()
 	print("It took %f seconds" % (endT-startT))
 	return lives
@@ -130,25 +131,34 @@ def simStateGen(state):
 	"""
 	
 	initState = list(state)
+	states = [state2num(initState)] # List of states that have occurred, represented by numbers
+									# and initialized with the initial state.
 	n = len(state)
 	counter = 0
 	while(True):
 		state = nextState(state)
-		if(isExtinct(state)):
-			print("Reached %d states" % counter)
-			return False
+		num = state2num(state)
 		
+		if(sum([i == num for i in states]) > 0):
+			#print("Reached %d states" % counter)
+			return True
+		states.append(num)
+		
+		if(isExtinct(state)):
+			#print("Goes extinct after %d states" % counter)
+			return False
+		"""
 		if(statesEqual(state,initState)):
+			print("Checked for equal states")
 			print("Reached %d states" % counter)
 			return True
-		
+		"""
 		counter = counter + 1
 		if(counter > 2**(n*n)-1):
 			break
-		#print(state)
 	
-	print("Reached %d states" % counter-1)
-	return True #Something wrong happened!
+	print("Reached maximum states")
+	return -1 #Something wrong happened!
 	
 def num2state(num, n):
 	"""
@@ -183,3 +193,18 @@ def num2state(num, n):
 	
 	return state
 
+def state2num(state):
+	"""
+	Returns a n**2-bit number that represents the state,
+	where n is the size of the nxn state.
+	"""
+	
+	n = len(state)
+	weight = 0
+	num = 0
+	for i in range(n):
+		for j in state[i]:
+			num = num + (2**weight)*j
+			weight = weight+1
+	
+	return num
