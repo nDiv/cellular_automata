@@ -1,15 +1,32 @@
 import math
 import time
 
+def simAutomaton(n):
+	startT = time.time()
+	
+	lives = 0
+	for i in range(1,2**n):
+	
+		if(simStateGen(num2state(i,n))):
+			lives = lives + 1
+			currentT = time.time()
+			print("Current lives: %d, time: %f" % (lives,currentT-startT))
+		
+		if(i%1000 == 0):
+			currentT = time.time()
+			print("Loop: %d, time: %f" % (i,currentT-startT))
+	
+	endT = time.time()
+	print("It took %f seconds" % (endT-startT))
+	return lives
+
 def isExtinct(state):
-	extinct = True
 	
 	for i in range(len(state)):
 		for j in state[i]:
 			if(j == 1):
-				extinct = False
-				break
-	return extinct
+				return False
+	return True
 	
 def nextState(state):
 	
@@ -69,3 +86,64 @@ def neigbhors(state,i,j):
 				nb.append(state[r[1][0]][r[1][1]])
 	
 	return nb
+	
+def statesEqual(S1,S2):
+	
+	n = len(S1)
+	
+	for i in range(n):
+		for j in range(n):
+			if(S1[i][j] != S2[i][j]):
+				return False
+	return True
+	
+def simStateGen(state):
+	
+	initState = list(state)
+	counter = 0
+	while(True):
+		state = nextState(state)
+		if(isExtinct(state)):
+			return False
+		
+		if(statesEqual(state,initState)):
+			return True
+			
+		if(counter > 100):
+			break
+			
+	return -1 #Something wrong happened!
+	
+def num2state(num, n):
+	
+	numBits = n**2
+	if(num > 2**numBits-1):
+		print("%d cannot be represented by %d bits" % (num, numBits))
+		return -1
+	
+	digits = [0]*numBits
+	state = [[0]*n for x in range(n)]
+	
+	count = numBits-1
+	i = 0
+	j = 0
+	index = n-1
+	
+	while(num > 0):
+		digits[count] = num%2
+		num = int(math.floor(num/2))
+		
+		state[i][j] = digits[count]
+		j = j + 1
+		
+		if(j > index):
+			j = 0
+			i = i + 1
+			
+		
+		count = count - 1
+		if(count < 0):
+			break
+	
+	return state
+
