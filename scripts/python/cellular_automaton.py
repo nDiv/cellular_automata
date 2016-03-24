@@ -51,8 +51,8 @@ def nextState(state):
 	
 	for i in range(n):
 		for j in range(n):
-			nb_sum = sum(neigbhors(state,i,j))
-			#print("sum of (%d,%d) is %d" % (i,j,nb_sum))
+			#nb_sum = sum(neighbors(state,i,j))
+			nb_sum = live_neighbors(state,i,j) # Terence's method is faster.
 			if(nb_sum == 1 or nb_sum == 2):
 				nState[i][j] = 1
 			#else:
@@ -60,7 +60,7 @@ def nextState(state):
 	
 	return nState
 	
-def neigbhors(state,i,j):
+def neighbors(state,i,j):
 	"""
 	returns nb, a list of neighbors of cell (i,j) in state.
 	"""
@@ -105,6 +105,20 @@ def neigbhors(state,i,j):
 				nb.append(state[r[1][0]][r[1][1]])
 	
 	return nb
+
+def live_neighbors(state,i,j):
+
+	n = len(state)
+	live = 0
+	x = [i-1,i-1,i-1,i,i,i+1,i+1,i+1]
+	y = [j-1,j,j+1,j-1,j+1,j-1,j,j+1]
+
+	for r, q in zip(x,y):
+		if(r>=0 and r<n and q>=0 and q<n):
+			if(state[r][q] == 1):
+				live += 1
+
+	return live
 	
 def statesEqual(S1,S2):
 	"""
