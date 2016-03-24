@@ -10,9 +10,11 @@ def simAutomaton(n):
 	startT = time.time()
 	
 	lives = 0
+	noExtinct = []
+	numSaved = [0]
 	for i in range(1,2**(n*n)): # Loop through all possible states except the zero state.
 	
-		if(simStateGen(num2state(i,n))): # If state does not go extinct, increment lives.
+		if(simStateGen(num2state(i,n),noExtinct,numSaved)): # If state does not go extinct, increment lives.
 			lives = lives + 1
 			#currentT = time.time()
 			#print("Current lives: %d, time: %f" % (lives,currentT-startT))
@@ -24,6 +26,8 @@ def simAutomaton(n):
 		
 	endT = time.time()
 	print("It took %f seconds" % (endT-startT))
+	print("States saved: %d" % numSaved[0])
+	print("States left over: %d" % len(noExtinct))
 	return lives
 
 def isExtinct(state):
@@ -119,7 +123,7 @@ def statesEqual(S1,S2):
 				return False
 	return True
 	
-def simStateGen(state):
+def simStateGen(state,noExtinct,numSaved):
 	"""
 	returns False if state goes extinct after generations
 	and True otherwise.
@@ -128,11 +132,20 @@ def simStateGen(state):
 		(2) A is not extinct if it either returns to the initial or
 			it never reaches the zero state after trying all possible states.
 	This rule is inefficient and a more efficient one must be implemented.
+	If this state does not go extinct, noExtinct collects intermediate states
+	that repeated - showing that it will not go extinct.
 	"""
 	
-	initState = list(state)
-	states = [state2num(initState)] # List of states that have occurred, represented by numbers
-									# and initialized with the initial state.
+	#initState = list(state)
+	initNum = state2num(state)
+	states = [initNum] # List of states that have occurred, represented by numbers
+								# and initialized with the initial state.
+	
+	if(initNum in noExtinct): # If state has led some state to not go extinct, then state
+							  # will not go extinct, too.
+		del noExtinct[noExtinct.index(initNum)]
+		return True
+
 	n = len(state)
 	counter = 0
 	while(True):
@@ -141,6 +154,9 @@ def simStateGen(state):
 		
 		if(sum([i == num for i in states]) > 0):
 			#print("Reached %d states" % counter)
+			if(num != initNum and num > initNum):
+				noExtinct.append(num)
+				numSaved[0] = numSaved[0] + 1
 			return True
 		states.append(num)
 		
