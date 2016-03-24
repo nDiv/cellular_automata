@@ -139,7 +139,7 @@ def simStateGen(state):
 		state = nextState(state)
 		num = state2num(state)
 		
-		if(sum([i == num for i in states]) > 0):
+		if(num in states):
 			#print("Reached %d states" % counter)
 			return True
 		states.append(num)
