@@ -12,7 +12,8 @@ def simAutomaton(n):
 	lives = 0
 	for i in range(1,2**(n*n)): # Loop through all possible states except the zero state.
 	
-		if(simStateGen(num2state(i,n))): # If state does not go extinct, increment lives.
+		#if(simStateGen(num2state(i,n))): # If state does not go extinct, increment lives.
+		if(simStateGen(int2state(i,n))):
 			lives = lives + 1
 			#currentT = time.time()
 			#print("Current lives: %d, time: %f" % (lives,currentT-startT))
@@ -145,13 +146,15 @@ def simStateGen(state):
 	"""
 	
 	initState = list(state)
-	states = [state2num(initState)] # List of states that have occurred, represented by numbers
-									# and initialized with the initial state.
+	#states = [state2num(initState)] # List of states that have occurred, represented by numbers
+	states = [state2int(initState)]  # and initialized with the initial state.
+
 	n = len(state)
 	counter = 0
 	while(True):
 		state = nextState(state)
-		num = state2num(state)
+		#num = state2num(state)
+		num = state2int(state)
 		
 		if(num in states):
 			#print("Reached %d states" % counter)
@@ -173,6 +176,39 @@ def simStateGen(state):
 	
 	print("Reached maximum states")
 	return -1 #Something wrong happened!
+
+def int2state(num,n):
+
+	numBits = n**2
+	if(num > 2**numBits-1):
+		print("%d cannot be represented by %d bits" % (num, numBits))
+		return -1
+
+	strnum = "{0:b}".format(num).zfill(numBits)
+	state = [[0]*n for x in range(n)]
+
+	index = 0
+	i = 0
+	j = 0
+	while(index < numBits):
+		state[i][j] = int(strnum[index])
+		j = j + 1
+		
+		if(j > n-1):
+			j = 0
+			i += 1
+		index += 1
+
+	return state
+
+def state2int(state):
+	strState = ''
+	n = len(state)
+	for i in range(n):
+		for j in state[i]:
+			strState = strState + str(j)
+
+	return int(strState,2)
 	
 def num2state(num, n):
 	"""
