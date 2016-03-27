@@ -1,17 +1,18 @@
 #include <iostream>
-#include <stdio>
+#include <stdio.h>
 #include <vector>
+#include <math.h>
 
 class gridState{
-	  std::vector<bool> cells;
-	  size_t size;
-	  size_t length;
+	  std::vector<int> cells;
+	  int size;
+	  int length;
 	
 	public:
-		gridState(size_t);
-    size_t live_neighbors(size_t, size_t);
-    void nextGen();
-    size_t state2Int();
-    void createFromInt(size_t);
-    void printState();
+		gridState(int);
+    //int live_neighbors(int, int);
+    //void nextGen();
+    //int state2Int();
+    void createFromInt(int);
+    //void printState();
 };
