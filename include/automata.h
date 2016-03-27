@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <vector>
 #include <math.h>
+#include <array>
 
 class gridState{
 	  std::vector<int> cells;
@@ -10,9 +11,11 @@ class gridState{
 	
 	public:
 		gridState(int);
-    //int live_neighbors(int, int);
-    //void nextGen();
-    //int state2Int();
+    int live_neighbors(int, int);
+    void nextGen();
+    int state2Int(void);
     void createFromInt(int);
-    //void printState();
+    void printState(void);
+		int getSize(void);
+		int getLen(void);
 };

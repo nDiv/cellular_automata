@@ -2,7 +2,10 @@
 CC = g++
 
 # define any compile-time flags
-CFLAGS = -Wall -g
+CFLAGS = -Wall -g -std=c++0x -I.
+
+# define target folder
+#BINDIR = -I../bin
 
 # define any directories containing header files other than /usr/include
 #
@@ -27,7 +30,7 @@ MAIN = test
 .PHONY: depend clean
 
 all: $(MAIN)
-	@echo  Simple compiler named mycc has been compiled
+	@echo  "Successfully compiled!"
 
 $(MAIN): $(OBJS) 
 	$(CC) $(CFLAGS) $(INCLUDES) -o $(MAIN) $(OBJS)
