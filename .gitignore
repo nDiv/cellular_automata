@@ -1,5 +1,11 @@
-#Ignore all python cache files
+# Ignore all python cache files
 __pycache__
 
 #Ignore all files ending with ~
 *~
+
+# Ignore the build dir
+build
+
+# Ignore any executables
+bin/*

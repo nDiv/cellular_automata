@@ -6,7 +6,7 @@ using namespace std;
 
 int main(void)
 {
-	int const n = 5; //Grid size.
+	int const n = 4; //Grid size.
 	int lives = 0; //Counter for surviving states.
 
 	const clock_t begin_time = clock();
